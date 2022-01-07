@@ -11,17 +11,18 @@ let gap_width = 10.
 let full_len = cone_len +. insert_len +. 0.2
 
 let scad =
-  let insert = Model.cylinder ((outer_diam -. outer_thickness) /. 2.) insert_len
+  let insert = Scad.cylinder ((outer_diam -. outer_thickness) /. 2.) insert_len
   and cone =
-    Model.linear_extrude
+    let s = (inner_diam +. nozzle) /. outer_diam in
+    Scad.linear_extrude
       ~height:cone_len
-      ~scale:((inner_diam +. nozzle) /. outer_diam)
-      (Model.circle ~fn:64 (outer_diam /. 2.))
-    |> Model.translate (0., 0., insert_len -. 0.001)
+      ~scale:(s, s)
+      (Scad.circle ~fn:64 (outer_diam /. 2.))
+    |> Scad.translate (0., 0., insert_len -. 0.001)
   and core =
-    Model.cylinder ~fn:64 (inner_diam /. 2.) full_len |> Model.translate (0., 0., -0.1)
+    Scad.cylinder ~fn:64 (inner_diam /. 2.) full_len |> Scad.translate (0., 0., -0.1)
   and gap =
-    Model.cube ~center:true (gap_width, outer_diam, full_len)
-    |> Model.translate (0., outer_diam /. 2., (full_len /. 2.) -. 0.1)
+    Scad.cube ~center:true (gap_width, outer_diam, full_len)
+    |> Scad.translate (0., outer_diam /. 2., (full_len /. 2.) -. 0.1)
   in
-  Model.difference (Model.union [ insert; cone ]) [ core; gap ]
+  Scad.difference (Scad.union [ insert; cone ]) [ core; gap ]

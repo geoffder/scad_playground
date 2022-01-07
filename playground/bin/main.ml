@@ -7,7 +7,7 @@ let write_thing ?(export = false) name scad =
   Stdio.printf "- %s => scad" name;
   Stdio.(Out_channel.flush stdout);
   let oc = Stdio.Out_channel.create (filename "scad") in
-  Scad_ml.Core.write oc scad;
+  Scad.write oc scad;
   if export
   then (
     Stdio.printf " => stl\n";
@@ -30,4 +30,6 @@ let write_thing ?(export = false) name scad =
 let () =
   Stdio.print_endline "Building (and maybe exporting) scads...";
   write_thing "curtain_ramp" Curtain_ramp.scad;
+  write_thing "dash_cover" Dash_cover.scad;
+  write_thing "scad_logo" Scad_logo.scad;
   Stdio.print_endline "Done!"
