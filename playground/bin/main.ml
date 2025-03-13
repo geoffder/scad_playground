@@ -1,13 +1,12 @@
 open! Base
-open! Scad_ml
+open! OSCADml
 open Playground
 
 let write_thing ?(export = false) name scad =
   let filename ext = Printf.sprintf "../things/%s.%s" name ext in
   Stdio.printf "- %s => scad" name;
   Stdio.(Out_channel.flush stdout);
-  let oc = Stdio.Out_channel.create (filename "scad") in
-  Scad.write oc scad;
+  Scad.to_file (filename "scad") scad;
   if export
   then (
     Stdio.printf " => stl\n";
@@ -19,7 +18,7 @@ let write_thing ?(export = false) name scad =
         else "openscad.com -q -o %s --export-format binstl %s" )
         (filename "stl")
         (filename "scad")
-      |> Caml.Sys.command
+      |> Stdlib.Sys.command
       |> function
       | 0 -> ()
       | _ -> failwith ""
@@ -32,4 +31,5 @@ let () =
   write_thing "curtain_ramp" Curtain_ramp.scad;
   write_thing "dash_cover" Dash_cover.scad;
   write_thing "scad_logo" Scad_logo.scad;
+  write_thing "keyflower" Keyflower.assembly;
   Stdio.print_endline "Done!"

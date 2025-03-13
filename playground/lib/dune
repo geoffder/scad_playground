@@ -1,6 +1,7 @@
 (library
  (name playground)
- (libraries scad_ml base stdio)
- (preprocess (pps ppx_jane)))
+ (libraries OSCADml OCADml base stdio)
+ (preprocess
+  (pps ppx_jane)))
 
 (include_subdirs unqualified)
